@@ -19,7 +19,6 @@ def parse_pdb_local(code):
 	structure = p.get_structure(code,f)
 	return structure
 
-
 def make_django_model(s):
 	header = s.header
 	ref= header['journal_reference']

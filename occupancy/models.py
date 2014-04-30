@@ -2,9 +2,11 @@ from django.db import models
 from django.shortcuts import redirect
 
 from Bio.PDB.PDBParser import PDBParser
+from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from bs4 import BeautifulSoup
 import numpy as np
 import urllib2
+from tempfile import NamedTemporaryFile
 
 class PDBstructure(models.Model):
 	"PDB strcture"
@@ -35,6 +37,26 @@ class PDBstructure(models.Model):
 			self.abstract = str(a.p)
 			self.save()
 		except:
+			pass
+
+	def get_abstract_from_mmcif(self):
+		url = "http://www.rcsb.org/pdb/files/%s.cif?headerOnly=YES" %self.code
+		f = urllib2.urlopen(url).read()
+		tmpf = NamedTemporaryFile()
+		tmpf.write(f)
+		mmcif = MMCIF2Dict(tmpf.name)
+		try:
+			pubmedid = mmcif.get('_citation.pdbx_database_id_PubMed')[0]
+			print pubmedid
+			pubmed_link = "http://www.ncbi.nlm.nih.gov/pubmed/%s?dopt=Abstract" %pubmedid
+			f = urllib2.urlopen(pubmed_link)
+			html = f.read()
+			soup = BeautifulSoup(html)
+			a = soup.find_all(class_="abstr")[0]
+			self.abstract = str(a.p)
+			self.save()
+		except:
+			print 'no abstract save for', self.code
 			pass
 
 	def img_url(self):
