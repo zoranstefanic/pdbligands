@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block "content"%}
+	<table class="ligand-table">
+	{% for k,v in types.items %}	
+				<tr>
+					<td><a href="/occupancy/ligand_pdbs/{{ k }}"> {{ k }}</a></td>
+					<td><a href="{{.url}}"><img src="{{lig.img_url}}"></img></a>
+					<td>{% for i in v %}{% if forloop.first%}<img src="{{i.img_url}}">{% endif %} + {%endfor%}</td>
+				</tr>
+	{% endfor %}
+	</table>
+{% endblock %}

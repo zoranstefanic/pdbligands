@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block "content"%}
+	<table class="ligand-table">
+	{% for lig in object_list %}	
+				<tr>
+					<td><a href="{{lig.url}}">{{lig}}</a>
+					<td><a href="{{lig.url}}"><img src="{{lig.img_url}}"></img></a>
+					<td>{{ lig.occupancy }}</td>
+				</tr>
+	{% endfor %}
+	</table>
+{% endblock %}

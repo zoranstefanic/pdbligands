@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+<style>
+.pdb {height:300px;clear:both; border: 1px solid red;overflow:hidden;}
+.navigation {height:50px;background-color:#fdd;}
+.content {margin-top:50px;}
+.search_form {float:right;}
+.abstract { width:50%;float:left; background-color:#df3; padding:10px;}
+table.ligands { width:20%; border:1px solid grey;}
+table.ligand-table {width:80%; margin:auto; border-top:2px solid grey;border-bottom:2px solid grey;}
+table.ligands tr {color:grey;}
+img.pdb_image { float:left;}
+</style>
+</head>
+<body>
+{% block "navigation"%}
+<div class="navigation"> <a href='{% url "pdb_list"%}'>PDBS</a> | <a href='{% url "ligand_list"%}'>LIGANDS</a> | <a href="/occupancy/totals/"> TOTALS </a> | <a href="/occupancy/ligand_types/"> TYPES </a>
+<div class="search_form">
+    <form action="/occupancy/search/" method="get">
+        <input type="text" name="q" value="search abstracts">
+        <input type="submit" value="Search">
+    </form></div>
+</form>
+</div>
+{% endblock %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+<div class="content">
+{% block "content" %}{% endblock %}
+</div>
+</body>
+</html>
