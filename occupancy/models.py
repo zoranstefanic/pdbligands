@@ -21,6 +21,15 @@ class PDBstructure(models.Model):
 	def pdb_url(self):
 		return 'http://www.rcsb.org/pdb/explore/explore.do?structureId=' + self.code
 
+	def get_mmcif(self):
+		url = "http://www.rcsb.org/pdb/files/%s.cif?headerOnly=YES" %self.code
+		f = urllib2.urlopen(url)
+		ciflines = f.readlines()
+		outfile = open('mmcifs/' + self.code + '.mmcif','w')
+		outfile.writelines(ciflines[1:-1])
+		print 'Wrote: %s cif' %self.code
+		outfile.close()
+
 	def get_abstract(self):
 		url = "http://www.rcsb.org/pdb/files/%s.cif?headerOnly=YES" %self.code
 		f = urllib2.urlopen(url)
