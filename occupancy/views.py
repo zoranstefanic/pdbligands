@@ -6,6 +6,8 @@ from occupancy.models import PDBstructure, Ligand
 from occupancy.forms import SearchForm
 import itertools
 
+import numpy as np
+from django.db.models import Count
 
 def search(request):
 	if request.GET.get('q'):
@@ -55,3 +57,8 @@ def ligand_types(request):
 def ligand_pdbs(request,code):
 	pdbs = PDBstructure.objects.filter(ligands__code=code)
 	return render(request,'occupancy/pdbstructure_list.html',{'object_list':pdbs,'form':SearchForm})
+
+
+def interesting(request):
+	pdb_ligands = PDBstructure.objects.annotate(num_ligands=Count('ligands'))
+	two_or_more_ligands = pdb_ligands.exclude(num_ligands=1)
