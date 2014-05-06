@@ -17,7 +17,7 @@ img.pdb_image { float:left;}
 </head>
 <body>
 {% block "navigation"%}
-<div class="navigation"> <a href='{% url "pdb_list"%}'>PDBS</a> | <a href='{% url "ligand_list"%}'>LIGANDS</a> | <a href="/occupancy/totals/"> TOTALS </a> | <a href="/occupancy/ligand_types/"> TYPES </a>
+<div class="navigation"> <a href='{% url "pdb_list"%}'>PDBS</a> | <a href='{% url "ligand_list"%}'>LIGANDS</a> | <a href="/occupancy/totals/"> TOTALS </a> | <a href="/occupancy/ligand_types/"> TYPES </a> | <a href="/occupancy/2index/"> TWO WORD INDEX </a>
 <div class="search_form">
     <form action="/occupancy/search/" method="get">
         <input type="text" name="q" value="search abstracts">

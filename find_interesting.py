@@ -10,9 +10,9 @@ def two_same_ligands(s):
     ligs = [l.code for l in s.ligands.all()]
     return len(set(ligs)) != len(ligs)
 
-
 def all_equal(l):
 	return len(set(l)) <= 1
+
 
 def same_ligand_different_occupancy(s):
 	ligands = s.ligands.all()
