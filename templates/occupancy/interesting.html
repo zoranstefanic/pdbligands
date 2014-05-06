@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block "content"%}
+	{{interesting|length}}
+	{% for s in interesting %}	
+	<li>{{s}}
+	{% endfor %}
+{% endblock %}

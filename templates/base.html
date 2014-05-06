@@ -16,6 +16,12 @@ img.pdb_image { float:left;}
 </style>
 </head>
 <body>
+<p> The PDBs here satisfy the following criteria:<br>
+<li> Must be an enzyme: have an E.C. number!
+<li> Must have at least one ligand with more than 5 atoms and all atoms of that ligand with occupancy less than one!
+<pre>NOTE:This way all pdbs are taken into account even the monomers! To exclude them the whole search should be repeted (1 day job)! <br>This will be done when we decide what additional information we need on all pdbs!</pre>
+<pre> DO WE HAVE ANY MORE IDEAS HOW TO LIMIT THE NUMBER OF HITS BESIDES EXCLUDING MONOMERS??? 
+<hr>
 {% block "navigation"%}
 <div class="navigation"> <a href='{% url "pdb_list"%}'>PDBS</a> | <a href='{% url "ligand_list"%}'>LIGANDS</a> | <a href="/occupancy/totals/"> TOTALS </a> | <a href="/occupancy/ligand_types/"> TYPES </a> | <a href="/occupancy/2index/"> TWO WORD INDEX </a>
 <div class="search_form">

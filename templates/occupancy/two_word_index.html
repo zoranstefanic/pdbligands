@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block "content"%}
+	<p> Total : {{words|length}}
+	<table>
+	{% for w in words %}	
+	<tr>
+	<td><a href="{%url 'search' %}?q={{w.0}}">{{w.0}}</a></td><td>{{ w.1 }}</td>
+	</tr>
+	{% endfor %}</table>
+{% endblock %}
