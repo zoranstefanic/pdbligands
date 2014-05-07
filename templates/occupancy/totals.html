@@ -3,4 +3,12 @@
 	<p> Total number of pdbs : {{ total_pdbs }} 
 	<p> Total number of ligands : {{ total_ligands }} 
 	<p> Total number of ligand types : {{ total_types }} 
+	<table class="table table-striped">
+		{% for kind in kinds %}
+		<tr>
+			<td>{{kind.0}}</td>
+			<td>{{kind.1}}</td>
+		</tr>
+		{% endfor %}
+	</table>
 {% endblock %}

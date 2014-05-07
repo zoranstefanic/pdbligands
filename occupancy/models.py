@@ -14,6 +14,7 @@ class PDBstructure(models.Model):
 	abstract = models.TextField(max_length=2000, verbose_name="Pub_med_abstract",null=True,blank=True)
 	reference = models.TextField(max_length=300, verbose_name="Reference",null=True,blank=True)
 	doi  = models.TextField(max_length=30, verbose_name="Doi",null=True,blank=True)
+	oligomer  = models.TextField(max_length=30, verbose_name="oligomer",null=True,blank=True)
 
 	def __unicode__(self):
 		return self.code
@@ -67,6 +68,25 @@ class PDBstructure(models.Model):
 		except:
 			print 'no abstract save for', self.code
 			pass
+
+	def get_info_from_mmcif(self,key):
+		cifname = 'mmcifs/' + self.code + '.mmcif'
+		try:
+			mmcif = MMCIF2Dict(cifname)
+			return mmcif.get(key)
+		except:
+			print 'no %s in %s' %(key,self.code)
+			
+
+	def get_oligomeric_state(self):
+		state = self.get_info_from_mmcif('_pdbx_struct_assembly.oligomeric_details')
+		if type(state) == type([]):
+			self.oligomer = state[0]
+		else:
+			self.oligomer = state
+		self.save()
+		print 'Saved %s as %s' %(self, self.oligomer)
+		
 
 	def img_url(self):
 		return 'http://www.rcsb.org/pdb/images/%s_bio_r_250.jpg' %self.code

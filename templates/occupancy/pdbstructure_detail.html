@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block "content"%}
+	<div>
+	<a href="{{pdb.pdb_url}}"><img src="{{pdb.img_url}}" class="pdb_image"></img></a>
+	<p> {{ pdb.code }}</p> 
+	<a href="{{pdb.doi}}">referenca</a>
+	<div class="abstract">{{ pdb.abstract }}</div>
+	</div>
+			<table class="ligands">
+			{% for lig in pdb.ligands.all %}	
+				<tr>
+					<td><a href="/occupancy/ligand_pdbs/{{lig.code}}">{{ lig }}</a></td>
+					<td><a href="{{lig.url}}"><img src="{{lig.img_url}}"></img></a>
+					<td>{{ lig.occupancy }}</td>
+				</tr>
+			{% endfor %}
+			</table>
+{% endblock %}

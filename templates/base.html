@@ -2,36 +2,50 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>PDBLIGANDS</title>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 <style>
 .pdb {height:300px;clear:both; border: 1px solid red;overflow:hidden;}
-.navigation {height:50px;background-color:#fdd;}
-.content {margin-top:50px;}
+.navigation {float:left;width:200px;background-color:#ddf;padding:10px;}
+.content {float:left;width:80%;margin:10px;}
 .search_form {float:right;}
-.abstract { width:50%;float:left; background-color:#df3; padding:10px;}
-table.ligands { width:20%; border:1px solid grey;}
+.abstract { width:60%;float:left; background-color:#df3; padding:10px;}
+table.ligands { width:15%;margin:5px;}
 table.ligand-table {width:80%; margin:auto; border-top:2px solid grey;border-bottom:2px solid grey;}
 table.ligands tr {color:grey;}
 img.pdb_image { float:left;}
 </style>
 </head>
 <body>
+<div class="panel panel-info">
 <p> The PDBs here satisfy the following criteria:<br>
 <li> Must be an enzyme: have an E.C. number!
 <li> Must have at least one ligand with more than 5 atoms and all atoms of that ligand with occupancy less than one!
-<pre>NOTE:This way all pdbs are taken into account even the monomers! To exclude them the whole search should be repeted (1 day job)! <br>This will be done when we decide what additional information we need on all pdbs!</pre>
-<pre> DO WE HAVE ANY MORE IDEAS HOW TO LIMIT THE NUMBER OF HITS BESIDES EXCLUDING MONOMERS??? 
+<pre> DO WE HAVE ANY MORE IDEAS HOW TO LIMIT THE NUMBER OF HITS BESIDES EXCLUDING MONOMERS??? </pre></div>
 <hr>
 {% block "navigation"%}
-<div class="navigation"> <a href='{% url "pdb_list"%}'>PDBS</a> | <a href='{% url "ligand_list"%}'>LIGANDS</a> | <a href="/occupancy/totals/"> TOTALS </a> | <a href="/occupancy/ligand_types/"> TYPES </a> | <a href="/occupancy/2index/"> TWO WORD INDEX </a>
-<div class="search_form">
-    <form action="/occupancy/search/" method="get">
-        <input type="text" name="q" value="search abstracts">
-        <input type="submit" value="Search">
-    </form></div>
-</form>
-</div>
+	<div class="navigation">
+	<ul>By pdb
+	<li><a href='{% url "pdb_list"%}'>pdbs(no monomers)</a></li>
+	<hr>
+	<p>By ligand</p>
+	<li><a href='{% url "ligand_list"%}'>ligands</a></li>
+	<li><a href="/occupancy/ligand_types/">ligand types</a></li>
+	<li><a href="/occupancy/ligand_counts/">ligand counts</a></li>
+	<hr>
+	<p>statistics</p>
+	<li><a href="/occupancy/2index/">two word index</a></li>
+	<li><a href="/occupancy/totals/">totals</a></li>
+	</ul>
+	<div class="search_form">
+		<form action="/occupancy/search/" method="get">
+			<input type="text" name="q" value="search abstracts">
+			<input type="submit" value="Search">
+		</form></div>
+	</form>
+	</div>
 {% endblock %}
+
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}

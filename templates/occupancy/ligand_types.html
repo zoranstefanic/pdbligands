@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block "content"%}
-	<table class="ligand-table">
+	<table class="table table-striped">
 	{% for k,v in types.items %}	
 				<tr>
 					<td><a href="/occupancy/ligand_pdbs/{{ k }}"> {{ k }}</a></td>
