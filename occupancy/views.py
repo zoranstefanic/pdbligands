@@ -83,10 +83,11 @@ def ligand_pdbs(request,code):
     pdbs = PDBstructure.objects.filter(ligands__code=code)
     return render(request,'occupancy/pdbstructure_list.html',{'object_list':pdbs,'form':SearchForm})
 
-def interesting(request,limit=0.1):
-    pdb_ligands = PDBstructure.objects.annotate(num_ligands=Count('ligands'))
+def interesting(request,limit):
+    pdb_ligands = PDBS.annotate(num_ligands=Count('ligands'))
     two_or_more_ligands = pdb_ligands.exclude(num_ligands=1)
-    limit = float(limit)    
+    if not limit: limit = 0.1
+    limit = float(limit)
     ret = []
     for s in two_or_more_ligands:
         ligands = s.ligands.all()
