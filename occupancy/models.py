@@ -15,6 +15,7 @@ class PDBstructure(models.Model):
 	reference = models.TextField(max_length=300, verbose_name="Reference",null=True,blank=True)
 	doi  = models.TextField(max_length=30, verbose_name="Doi",null=True,blank=True)
 	oligomer  = models.TextField(max_length=30, verbose_name="oligomer",null=True,blank=True)
+	ligand_types = models.ManyToManyField('Ligand_type',related_name="in_pdbs",null=True)
 
 	def __unicode__(self):
 		return self.code
@@ -95,6 +96,7 @@ class Ligand(models.Model):
 	code = models.CharField(max_length=3, verbose_name="Ligand code")
 	chain_id = models.CharField(max_length=1, verbose_name="Chain id")
 	pdb = models.ForeignKey('PDBstructure',related_name="ligands")
+	ltype = models.ForeignKey('Ligand_type',related_name="ligands_of_this_type",null=True)
 	occupancy = models.FloatField(null=True)
 
 	def __unicode__(self):
@@ -106,3 +108,14 @@ class Ligand(models.Model):
 	def img_url(self):
 		return 'http://www.rcsb.org/pdb/images/%s_200.gif' %self.code
 
+class Ligand_type(models.Model):
+	code = models.CharField(max_length=3, verbose_name="Ligand type")
+
+	def __unicode__(self):
+		return self.code
+
+	def url(self):
+		return '/occupancy/ligand_type/' + self.code
+
+	def img_url(self):
+		return 'http://www.rcsb.org/pdb/images/%s_200.gif' %self.code
