@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block "content"%}
+	<table class="table table-striped">
+	{% for lig in ligtypes %}	
+				<tr>
+					<td><a href="/occupancy/ligand_pdbs/{{ lig.code }}">{{ lig.code }}</a></td>
+					<td><a href="{{.url}}"><img src="{{lig.img_url}}"></img></a>
+					<td>Found in {{lig.pdb_num}} pdbs</a>
+					<td>{% for pdb in lig.in_pdbs.all %} <a href="{%url 'pdbstructure_detail' pdb.pk %}">{{ pdb }}</a> {%endfor%}</td>
+				</tr>
+	{% endfor %}
+	</table>
+{% endblock %}

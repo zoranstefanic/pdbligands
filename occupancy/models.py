@@ -77,7 +77,6 @@ class PDBstructure(models.Model):
 			return mmcif.get(key)
 		except:
 			print 'no %s in %s' %(key,self.code)
-			
 
 	def get_oligomeric_state(self):
 		state = self.get_info_from_mmcif('_pdbx_struct_assembly.oligomeric_details')
@@ -87,7 +86,6 @@ class PDBstructure(models.Model):
 			self.oligomer = state
 		self.save()
 		print 'Saved %s as %s' %(self, self.oligomer)
-		
 
 	def img_url(self):
 		return 'http://www.rcsb.org/pdb/images/%s_bio_r_250.jpg' %self.code

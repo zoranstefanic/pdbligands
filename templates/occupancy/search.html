@@ -1,20 +1,24 @@
 {% extends "base.html" %}
 {% block "content"%}
 	<h3>Search for <em>"{{query}}"</em> returned {{ number }} of hits.</h3>
+	<table class="table table-striped">
 	{% for pdb in object_list %}	
-	<div class="pdb">
-	<a href="{{pdb.pdb_url}}"><img src="{{pdb.img_url}}" class="pdb_image"></img></a>
-	<p> {{ pdb.code }}</p> 
-	<a href="{{pdb.doi}}">referenca</a>
-	<div class="abstract">{{ pdb.abstract }}</div>
-			<table class="ligands">
-			{% for lig in pdb.ligands.all %}	
-				<tr>
-					<td><a href="/occupancy/ligand_pdbs/{{lig.code}}">{{ lig }}</a></td>
-					<td>{{ lig.occupancy }}</td>
-				</tr>
-			{% endfor %}
-			</table>
-	</div>
+		<tr>
+			<td><a href="{{pdb.pdb_url}}"><img src="{{pdb.img_url}}" class="pdb_image"></img></a></td>
+			<td>
+				<p> <a href="{% url 'pdbstructure_detail' pdb.pk%}">{{ pdb.code }}</a></p> 
+				<a href="{{pdb.doi}}">referenca</a>
+				<div class="abstract">{{ pdb.abstract }}</div>
+					<table class="table table-striped ligands">
+						{% for lig in pdb.ligands.all %}	
+							<tr>
+								<td><a href="/occupancy/ligand_pdbs/{{lig.code}}">{{ lig }}</a></td>
+								<td>{{ lig.occupancy }}</td>
+							</tr>
+						{% endfor %}
+					</table>
+			</td>
+		</tr>
 	{% endfor %}
+	</table>
 {% endblock %}

@@ -5,23 +5,24 @@
 	<title>PDBLIGANDS</title>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 <style>
-.pdb {height:300px;clear:both; border: 1px solid red;overflow:hidden;}
+.pdb {clear:both; border: 1px solid red;overflow:hidden;}
 .navigation {float:left;width:200px;background-color:#ddf;padding:10px;}
 .content {float:left;width:80%;margin:10px;}
-.search_form {float:right;}
 .abstract { width:60%;float:left; background-color:#df3; padding:10px;}
 table.ligands { width:15%;margin:5px;}
-table.ligand-table {width:80%; margin:auto; border-top:2px solid grey;border-bottom:2px solid grey;}
-table.ligands tr {color:grey;}
+table.ligand-table {width:80%; margin:auto;}
 img.pdb_image { float:left;}
 </style>
 </head>
 <body>
-<div class="panel panel-info">
+<div class="panel panel-default">
+<div class="panel-body">
 <p> The PDBs here satisfy the following criteria:<br>
+<ul>
 <li> Must be an enzyme: have an E.C. number!
 <li> Must have at least one ligand with more than 5 atoms and all atoms of that ligand with occupancy less than one!
-<pre> DO WE HAVE ANY MORE IDEAS HOW TO LIMIT THE NUMBER OF HITS BESIDES EXCLUDING MONOMERS??? </pre></div>
+</ul>
+</div>
 <hr>
 {% block "navigation"%}
 	<div class="navigation">
@@ -31,21 +32,24 @@ img.pdb_image { float:left;}
 	<p>By ligand</p>
 	<li><a href='{% url "ligand_list"%}'>ligands</a></li>
 	<li><a href="/occupancy/ligand_types/">ligand types</a></li>
+	<li><a href="/occupancy/ligand_types_new/">ligand types_new</a></li>
 	<li><a href="/occupancy/ligand_counts/">ligand counts</a></li>
 	<hr>
 	<p>statistics</p>
 	<li><a href="/occupancy/2index/">two word index</a></li>
 	<li><a href="/occupancy/totals/">totals</a></li>
 	</ul>
-	<div class="search_form">
-		<form action="/occupancy/search/" method="get">
-			<input type="text" name="q" value="search abstracts">
-			<input type="submit" value="Search">
-		</form></div>
-	</form>
 	</div>
 {% endblock %}
-
+	<div class="form-inline pull-right">
+		<form action="/occupancy/search/" method="get">
+		  <div class="form-group">
+			<label for="Search">Search abstracts</label>
+			<input type="text" class="form-control" name="q" id="Search" placeholder="Enter">
+		  </div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	</div>
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}

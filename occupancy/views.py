@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.generic import ListView, DetailView
 from django.views.decorators.cache import cache_page
-from occupancy.models import PDBstructure, Ligand
+from occupancy.models import PDBstructure, Ligand, Ligand_type
 from occupancy.forms import SearchForm
 import itertools
 
@@ -65,6 +65,11 @@ def ligand_types(request):
     for t,v in types:
         d[t] = [i for i in v]
     return render(request,'occupancy/ligand_types.html',{'types':d})
+
+def ligand_types_new(request):
+    ligtypes = Ligand_type.objects.annotate(pdb_num=Count('in_pdbs')).order_by('-pdb_num')
+    return render(request,'occupancy/ligand_types_new.html',{'ligtypes':ligtypes})
+    
 
 def ligand_counts(request):
     types = set([c[0] for c in Ligand.objects.values_list('code')])
