@@ -2,6 +2,7 @@
 {% block "content"%}
 	{{interesting|length}}
 	{% for s in interesting %}	
+	<li><a href="{% url 'pdbstructure_detail' s.0.pk %}"> {{ s.0 }}</a>
 	<li>{{s}}
 	{% endfor %}
 {% endblock %}
