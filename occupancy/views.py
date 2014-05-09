@@ -12,7 +12,7 @@ from django.db.models import Count
 from find_interesting import all_equal
 from word_count import two_words
 
-PDBS = PDBstructure.objects.exclude(oligomer='monomeric')
+PDBS = PDBstructure.objects.select_related().exclude(oligomer='monomeric')
 
 def search(request):
     if request.GET.get('q'):
@@ -84,27 +84,25 @@ def ligand_pdbs(request,code):
     return render(request,'occupancy/pdbstructure_list.html',{'object_list':pdbs,'form':SearchForm})
 
 def interesting(request,limit):
-    pdb_ligands = PDBS.annotate(num_ligands=Count('ligands'))
-    two_or_more_ligands = pdb_ligands.exclude(num_ligands=1)
     if not limit: limit = 0.1
     limit = float(limit)
     ret = []
-    for s in two_or_more_ligands:
-        ligands = s.ligands.all()
-        ligand_codes = [l.code for l in s.ligands.all()]
-        ligand_types = set(ligand_codes)
-        for lt in ligand_types:
-            chosen = ligands.filter(code=lt)
+
+    pdbs = PDBS.annotate(num_ligands=Count('ligands')).exclude(num_ligands=1)
+    for s in pdbs:
+        for lt in s.ligand_types.all():
+            chosen = s.ligands.filter(code=lt.code)
             if len(chosen) > 1:
                 occs = [l.occupancy for l in chosen]
                 variance =  np.std(occs)
                 if not all_equal(occs) and variance > limit:
                     ret.append([s,lt,occs,variance])
+    ret = sorted(ret, key=lambda a: a[-1], reverse=True)
     return render(request,'occupancy/interesting.html',{'interesting':ret})
 
 def two_word_index(request):
     d = {}
-    abstract_pdb = PDBstructure.objects.exclude(abstract=None)
+    abstract_pdb = PDBS.objects.exclude(abstract=None)
     for pdb in abstract_pdb:
         abstract = pdb.abstract.lower()
         for i in two_words(abstract):

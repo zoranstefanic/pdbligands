@@ -7,7 +7,7 @@
 			<td>
 				<p> <a href="{% url 'pdbstructure_detail' pdb.pk%}">{{ pdb.code }}</a></p> 
 				<a href="{{pdb.doi}}">referenca</a>
-				<div class="abstract">{{ pdb.abstract }}</div>
+				<div class="abstract">{{ pdb.abstract|striptags }}</div>
 					<table class="table table-striped ligands pull-right">
 						{% for lig in pdb.ligands.all %}	
 							<tr>
