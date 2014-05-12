@@ -116,5 +116,9 @@ def two_word_index(request):
         words.append((k,d[k]))
     return render(request,'occupancy/two_word_index.html', {'words':words}) 
 
-
-
+def mark_pdb_checked(request):
+    if request.is_ajax():
+			pdb_id = request.POST['pdb_id']
+			pdb=PDBstructure.objects.get(code=pdb_id)
+			pdb.checked = True
+			pdb.save()

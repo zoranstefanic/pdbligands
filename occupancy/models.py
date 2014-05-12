@@ -16,6 +16,7 @@ class PDBstructure(models.Model):
 	doi  = models.TextField(max_length=30, verbose_name="Doi",null=True,blank=True)
 	oligomer  = models.TextField(max_length=30, verbose_name="oligomer",null=True,blank=True)
 	ligand_types = models.ManyToManyField('Ligand_type',related_name="in_pdbs",null=True)
+	checked = models.NullBooleanField()
 
 	def __unicode__(self):
 		return self.code

@@ -4,6 +4,29 @@
 	<meta charset="UTF-8">
 	<title>PDBLIGANDS</title>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+function mark_pdb_checked() {
+    var pdb_id = $('.checked').attr('pdb_id');
+    $.ajax({
+        type: "POST",
+        url:  "/occupancy/mark_pdb_checked/"
+        data: {
+            pdb_id: pdb_id,
+        },
+        success: function(data) {
+            alert("Congratulations! You checked: "+pdb_id);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            alert("Please report this error: "+errorThrown+xhr.status+xhr.responseText);
+        }
+    });
+});
+</script>
+
+
+
 <style>
 .pdb {clear:both; border: 1px solid red;overflow:hidden;}
 .navigation {float:left;width:200px;background-color:#ddf;padding:10px;}
