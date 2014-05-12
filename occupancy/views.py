@@ -9,10 +9,15 @@ import itertools
 
 import numpy as np
 from django.db.models import Count
+from django.db.models.query_utils import Q
+from django.http import HttpResponse
 from find_interesting import all_equal
 from word_count import two_words
 
 PDBS = PDBstructure.objects.select_related().exclude(oligomer='monomeric')
+ligands_to_exclude = Q(ligand_types__code="MSE") | Q(ligand_types__code="GOL") | Q(ligand_types__code="CIT") | Q(ligand_types__code="MPD")
+
+PDBS = PDBS.exclude(ligands_to_exclude)
 
 def search(request):
     if request.GET.get('q'):
@@ -117,8 +122,12 @@ def two_word_index(request):
     return render(request,'occupancy/two_word_index.html', {'words':words}) 
 
 def mark_pdb_checked(request):
-    if request.is_ajax():
-			pdb_id = request.POST['pdb_id']
-			pdb=PDBstructure.objects.get(code=pdb_id)
-			pdb.checked = True
-			pdb.save()
+	from django.core.serializers import serialize
+	if request.is_ajax():
+		pdb_id = request.POST.get('pdb_id',None)
+		pdb=PDBstructure.objects.get(code=pdb_id)
+		pdb.checked = True
+		pdb.save()
+	s = serialize('json',[pdb])
+	return HttpResponse(s,mimetype='application/json')
+	#return redirect('pdb_list')
