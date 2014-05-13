@@ -25,8 +25,8 @@ PDBS = PDBS.exclude(ligands_to_exclude)
 def search(request):
     if request.GET.get('q'):
         q = request.GET['q']
-        #pdbs = PDBS.filter(abstract__icontains=q)
-        pdbs = PDBstructure.objects.filter(abstract__icontains=q)
+        pdbs = PDBS.filter(abstract__icontains=q)
+        #pdbs = PDBstructure.objects.filter(abstract__icontains=q)
         return render(request, 'occupancy/search.html',{'query':q, 'number':len(pdbs),'object_list':pdbs})
     else:
         return redirect('pdb_list')
@@ -114,7 +114,8 @@ def interesting(request,limit):
 
 def two_word_index(request):
     d = {}
-    abstract_pdb = PDBS.exclude(abstract=None)
+    #abstract_pdb = PDBS.exclude(abstract=None)
+    abstract_pdb = PDBstructure.objects.exclude(abstract=None)
     for pdb in abstract_pdb:
         abstract = pdb.abstract.lower()
         for i in two_words(abstract):
