@@ -15,6 +15,9 @@ from find_interesting import all_equal
 from word_count import two_words
 
 PDBS = PDBstructure.objects.select_related().exclude(oligomer='monomeric')
+PDBS = PDBS.annotate(lig_no=Count('ligands'))
+PDBS = PDBS.filter(lig_no__gt=1)
+
 ligands_to_exclude = Q(ligand_types__code="MSE") | Q(ligand_types__code="GOL") | Q(ligand_types__code="CIT") | Q(ligand_types__code="MPD")
 
 PDBS = PDBS.exclude(ligands_to_exclude)
@@ -22,15 +25,21 @@ PDBS = PDBS.exclude(ligands_to_exclude)
 def search(request):
     if request.GET.get('q'):
         q = request.GET['q']
-        pdbs = PDBS.filter(abstract__icontains=q)
+        #pdbs = PDBS.filter(abstract__icontains=q)
+        pdbs = PDBstructure.objects.filter(abstract__icontains=q)
         return render(request, 'occupancy/search.html',{'query':q, 'number':len(pdbs),'object_list':pdbs})
     else:
         return redirect('pdb_list')
 
 class PDBstructureList(ListView):
     model = PDBstructure
-    paginate_by = 20
+    paginate_by = 25
     queryset = PDBS
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(PDBstructureList, self).get_context_data(**kwargs)
+        context['total'] = PDBS.count()
+        return context
 
 class LigandList(ListView):
     model = Ligand
@@ -74,7 +83,6 @@ def ligand_types(request):
 def ligand_types_new(request):
     ligtypes = Ligand_type.objects.annotate(pdb_num=Count('in_pdbs')).order_by('-pdb_num')
     return render(request,'occupancy/ligand_types_new.html',{'ligtypes':ligtypes})
-    
 
 def ligand_counts(request):
     types = set([c[0] for c in Ligand.objects.values_list('code')])
@@ -93,8 +101,7 @@ def interesting(request,limit):
     limit = float(limit)
     ret = []
 
-    pdbs = PDBS.annotate(num_ligands=Count('ligands')).exclude(num_ligands=1)
-    for s in pdbs:
+    for s in PDBS:
         for lt in s.ligand_types.all():
             chosen = s.ligands.filter(code=lt.code)
             if len(chosen) > 1:
@@ -107,7 +114,7 @@ def interesting(request,limit):
 
 def two_word_index(request):
     d = {}
-    abstract_pdb = PDBS.objects.exclude(abstract=None)
+    abstract_pdb = PDBS.exclude(abstract=None)
     for pdb in abstract_pdb:
         abstract = pdb.abstract.lower()
         for i in two_words(abstract):

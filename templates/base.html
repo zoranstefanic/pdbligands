@@ -15,29 +15,29 @@ $(document).ready(function() {
                         //'pdb_id': $('#test').val() // from form
                         'pdb_id': $(this).attr('pdb_id'), // from form
 						'csrfmiddlewaretoken': '{{ csrf_token }}',
-				dataType: 'json',
+				        dataType: 'json',
                         },
-                 success: function(result){
+                    success: function(result){
 					console.log(result);
-					//$(this).load(data);
                     //$('#message').html("<h2>Success</h2>");
                  }
             });
+			$(this).parents('tr').first().addClass('pdb-checked');
             return false; //<---- move it here
        });
 });
 </script>
-
 <style>
 .pdb {clear:both; border: 1px solid red;overflow:hidden;}
 .navigation {float:left;width:200px;background-color:#ddf;padding:10px;}
 .content {float:left;width:80%;margin:10px;}
-.abstract { width:60%;float:left; background-color:#df3; padding:10px;}
-tr.checked p { background-color:#f43;}
+.abstract { width:60%;float:left; background-color:#ddf; padding:10px;color:333;}
+.pdb-checked  { background-color:#df3;}
 table.ligands { width:15%;margin:5px;}
 table.ligand-table {width:80%; margin:auto;}
 img.pdb_image { float:left;}
 </style>
+
 </head>
 <body>
 <div class="panel panel-default">
@@ -46,6 +46,8 @@ img.pdb_image { float:left;}
 <ul>
 <li> Must be an enzyme: have an E.C. number!
 <li> Must have at least one ligand with more than 5 atoms and all atoms of that ligand with occupancy less than one!
+<li> Structures that containing only this ligands: GOL, MSE, CIT and MPD are excluded!
+<li> Structures containing only one ligand are excluded!
 </ul>
 </div>
 <hr>

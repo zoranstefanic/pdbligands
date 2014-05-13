@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% block "content"%}
-	<div>
+	<table class="table">
+	<tr {%if pdb.checked%}class="pdb-checked"{%endif%} >
+	<td>
 	<a href="{{pdb.pdb_url}}"><img src="{{pdb.img_url}}" class="pdb_image"></img></a>
 	<p> {{ pdb.code }}</p> 
 	<a href="{{pdb.doi}}">referenca</a>
+	<a class="checked" pdb_id="{{pdb.code}}" href="{%url 'mark_pdb_checked'%}">checked</a>
 	<div class="abstract">{{ pdb.abstract }}</div>
-	</div>
+	</td>
+</tr>			</table>
 			<table class="ligands">
 			{% for lig in pdb.ligands.all %}	
 				<tr>

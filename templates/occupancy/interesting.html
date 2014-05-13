@@ -2,10 +2,10 @@
 {% block pagination %}
 {% endblock %}
 {% block "content"%}
-	{{interesting|length}}
-<table class="table table-striped">
+{{interesting|length}}
+<table class="table">
 	{% for s in interesting %}	
-	<tr>
+	<tr {%if s.0.checked == True %}class="pdb-checked"{%endif%} >
 		<td><a href="{% url 'pdbstructure_detail' s.0.pk %}">{{ s.0 }}</a></td>
 		<td>{{s.1}}</td>
 		<td>{{s.2}}</td>

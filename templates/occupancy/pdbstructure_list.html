@@ -1,25 +1,9 @@
 {% extends "base.html" %}
 {% block "content"%}
-	<div class="message"></div>
-	<table class="table table-striped">
+	<p> Total structures: {{ total }} </p>
+	<table class="table">
 	{% for pdb in object_list %}	
-		<tr {%if pdb.checked%}class="checked"{%endif%} >
-			<td><a href="{{pdb.pdb_url}}"><img src="{{pdb.img_url}}" class="pdb_image"></img></a></td>
-			<td>
-				<p> <a href="{% url 'pdbstructure_detail' pdb.pk%}">{{ pdb.code }}</a></p> 
-				<a href="{{pdb.doi}}">referenca</a>
-				<a class="checked" pdb_id="{{pdb.code}}" href="">checked</a>
-				<div class="abstract">{{ pdb.abstract|striptags }}</div>
-					<table class="table table-striped ligands pull-right">
-						{% for lig in pdb.ligands.all %}	
-							<tr>
-								<td><a href="/occupancy/ligand_pdbs/{{lig.code}}">{{ lig }}</a></td>
-								<td>{{ lig.occupancy }}</td>
-							</tr>
-						{% endfor %}
-					</table>
-			</td>
-		</tr>
+	{% include "pdb_row.html" %}
 	{% endfor %}
 	</table>
 {% endblock %}
